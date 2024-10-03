@@ -1,0 +1,59 @@
+extends layout.pug
+
+block content
+  .container.contact-info-page.mt-5.text-center
+    .card.border-primary.mx-auto(style="max-width: 500px;")
+      .card-header
+        h1.card-title Contact Info
+        button.btn.btn-secondary.mb-3(type='button', onclick="window.location.href='/'") Back to list
+      .card-body
+        h2.card-title.mb-4(style="margin-top: 5px; margin-bottom: 20px;") #{contact.first_name} #{contact.last_name}
+        
+        //- Contact information
+        .contact-info.mb-3
+          p.card-text
+            b Phone number: 
+            span #{contact.phone}
+            br
+            i May
+            if contact.contact_by_phone
+              |  be contacted by phone or text
+            else
+              |  NOT be contacted by phone or text
+
+          p.card-text
+            b Email address: 
+            span #{contact.email}
+            br
+            i May
+            if contact.contact_by_email
+              |  be contacted by email
+            else
+              |  NOT be contacted by email
+
+          p.card-text
+            b Address:
+            br
+            span #{contact.street}
+            span , 
+            br
+            span #{contact.city}
+            span , 
+            span #{contact.state}
+            span , 
+            span #{contact.zip}
+            br
+            span #{contact.country}
+            br
+            i May
+            if contact.contact_by_mail
+              |  be contacted by mail
+            else
+              |  NOT be contacted by mail
+
+        if user  
+          .btn-group.mb-3
+            button.btn.btn-primary.mt-3(type='button', onclick=`window.location.href="/${contactIndex}/edit"`) Edit contact
+            button.btn.btn-danger.mt-3(type='button', onclick=`window.location.href="/${contactIndex}/delete"`) Delete contact
+        else
+          b **Sign in to access edit and delete features!**

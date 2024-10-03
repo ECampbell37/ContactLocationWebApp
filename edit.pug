@@ -1,0 +1,72 @@
+extends layout.pug
+
+block content
+  .container.mt-5.mb-5
+    .form-container.d-flex.flex-column.align-items-center.justify-content-center
+      h1.mb-5 Edit Contact
+      form(action=`/${contact.id}/edit`, method='post')
+        .row.mb-3
+          .col-sm-6
+            fieldset.mb-3
+              legend Basic Info
+              .row.mb-3
+                label.col-sm-4.col-form-label.text-sm-end(for='first') First Name:
+                .col-sm-8
+                  input.form-control(type='text', name='first_name', value=contact.first_name)
+              .row.mb-3
+                label.col-sm-4.col-form-label.text-sm-end(for='last') Last Name:
+                .col-sm-8
+                  input.form-control(type='text', name='last_name', value=contact.last_name)
+              .row.mb-3
+                label.col-sm-4.col-form-label.text-sm-end(for='phone') Phone:
+                .col-sm-8
+                  input.form-control(type='text', name='phone', value=contact.phone)
+              .row.mb-3
+                label.col-sm-4.col-form-label.text-sm-end(for='email') Email:
+                .col-sm-8
+                  input.form-control(type='email', name='email', value=contact.email)
+          .col-sm-6
+            fieldset.mb-3
+              legend Address
+              .row.mb-3
+                label.col-sm-4.col-form-label.text-sm-end(for='street') Street:
+                .col-sm-8
+                  input.form-control(type='text', name='street', value=contact.street)
+              .row.mb-3
+                label.col-sm-4.col-form-label.text-sm-end(for='city') City:
+                .col-sm-8
+                  input.form-control(type='text', name='city', value=contact.city)
+              .row.mb-3
+                label.col-sm-4.col-form-label.text-sm-end(for='state') State:
+                .col-sm-8
+                  input.form-control(type='text', name='state', value=contact.state)
+              .row.mb-3
+                label.col-sm-4.col-form-label.text-sm-end(for='zip') Zip:
+                .col-sm-8
+                  input.form-control(type='text', name='zip', value=contact.zip)
+              .row.mb-3
+                label.col-sm-4.col-form-label.text-sm-end(for='country') Country:
+                .col-sm-8
+                  input.form-control(type='text', name='country', value=contact.country)
+        .row.mb-3
+          .col-sm-1
+            fieldset.mb-3.col-sm-1.offset-sm-3
+              div
+                legend.mb-2 Contact&nbsp;Preferences
+                section.form-check
+                  input#contact_by_phone.form-check-input(type='checkbox', name='contact_by_phone', checked=contact.contact_by_phone ? 'checked' : null)
+                  label.form-check-label(for='contact_by_phone') Contact&nbsp;by&nbsp;phone
+                section.form-check
+                  input#contact_by_email.form-check-input(type='checkbox', name='contact_by_email', checked=contact.contact_by_email ? 'checked' : null)
+                  label.form-check-label(for='contact_by_email') Contact&nbsp;by&nbsp;email
+                section.form-check
+                  input#contact_by_mail.form-check-input(type='checkbox', name='contact_by_mail', checked=contact.contact_by_mail ? 'checked' : null)
+                  label.form-check-label(for='contact_by_mail') Contact&nbsp;by&nbsp;mail
+        .row.justify-content-center
+          .col-auto
+            button.btn.btn-primary.btn-lg.mt-3.mb-3(type='submit') Update
+          .col-auto
+            button.btn.btn-secondary.btn-lg.mt-3.mb-3(type='button', onclick="window.location.href='/'") Cancel
+
+          if error
+            p.error-box.mb-3= error

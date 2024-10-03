@@ -1,0 +1,72 @@
+extends layout.pug
+
+block content
+  .container.mt-5.mb-5
+    .form-container.d-flex.flex-column.align-items-center.justify-content-center
+      h1.mb-5 Create Contact
+      form.wider-form(action='/create', method='post')
+        .row.mb-3
+          .col-sm-6
+            fieldset.mb-3
+              legend Basic Info
+              .row.mb-3
+                section.form-group
+                  label(for='first') First Name:
+                  input.form-control(type='text', name='first_name')
+              .row.mb-3
+                section.form-group
+                  label(for='last') Last Name:
+                  input.form-control(type='text', name='last_name')
+              .row.mb-3
+                section.form-group
+                  label(for='phone') Phone:
+                  input.form-control(type='tel', name='phone')
+              .row.mb-3
+                section.form-group
+                  label(for='email') Email:
+                  input.form-control(type='email', name='email')
+          .col-sm-6
+            fieldset.mb-3
+              legend Address
+              .row.mb-3
+                section.form-group
+                  label(for='street') Street:
+                  input.form-control(type='text', name='street')
+              .row.mb-3
+                section.form-group
+                  label(for='city') City:
+                  input.form-control(type='text', name='city')
+              .row.mb-3
+                section.form-group
+                  label(for='state') State:
+                  input.form-control(type='text', name='state')
+              .row.mb-3
+                section.form-group
+                  label(for='zip') Zip:
+                  input.form-control(type='text', name='zip')
+              .row.mb-3
+                section.form-group
+                  label(for='country') Country:
+                  input.form-control(type='text', name='country')
+        .row.mb-3
+          .col-sm-1
+            fieldset.mb-3.col-sm-1.offset-sm-3
+              legend Contact&nbsp;Preferences
+              section.form-check
+                input#contact_by_phone.form-check-input(type='checkbox', name='contact_by_phone')
+                label.form-check-label(for='contact_by_phone') Contact&nbsp;by&nbsp;phone
+              section.form-check
+                input#contact_by_email.form-check-input(type='checkbox', name='contact_by_email')
+                label.form-check-label(for='contact_by_email') Contact&nbsp;by&nbsp;email
+              section.form-check
+                input#contact_by_mail.form-check-input(type='checkbox', name='contact_by_mail')
+                label.form-check-label(for='contact_by_mail') Contact&nbsp;by&nbsp;mail
+        .row.justify-content-center
+          .col-auto
+            button.btn.btn-primary.btn-lg.mt-3.mb-3(type='submit') Add
+          .col-auto
+            button.btn.btn-secondary.btn-lg.mt-3.mb-3(type='button', onclick="window.location.href='/'") Cancel
+          
+          if error
+            p.error-box.mb-3= error
+

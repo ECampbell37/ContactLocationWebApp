@@ -1,0 +1,128 @@
+extends layout.pug
+
+block content
+  .container.mt-4
+    //-Header Section
+    .header-container.d-flex.justify-content-between.align-items-center.mb-4
+      h1 Contact List
+      button.create-contact.btn.btn-primary(type='button', onclick="window.location.href='/create'") Create a new contact
+
+    //- Search fields for First and Last Name
+    .search-fields.mb-4
+      input#firstNameSearch.form-control(type='text', placeholder='Search by First Name')
+      input#lastNameSearch.form-control(type='text', placeholder='Search by Last Name')
+
+    //- Contact List
+    ul.contact-list(style="border: 1px solid #dee2e6; padding: 20px; width: 100%; list-style-type: none;")
+      each contact in contacts
+        - if ((!firstNameSearch || !firstNameSearch.value || contact.first_name.toLowerCase().includes(firstNameSearch.value.toLowerCase())) && (!lastNameSearch || !lastNameSearch.value || contact.last_name.toLowerCase().includes(lastNameSearch.value.toLowerCase())))
+          li.contact-item(style="border-bottom: 1px solid #dee2e6; margin-bottom: 20px;")
+            //- Contact Name
+            .contact-header.d-flex.justify-content-between
+              .contact-name
+                h2(style="margin-bottom: 10px;")
+                  a.contact-link(href=`/${contact.id}`) #{contact.first_name} #{contact.last_name}
+            //- Contact Information
+            .contact-info-container
+              p.contact-info(style="margin-bottom: 10px;")
+                span(style="font-weight: bold; margin-right: 10px;") Phone:
+                span(style="margin-right: 10px;") #{contact.phone}
+              p.contact-info(style="margin-bottom: 10px;")
+                span(style="font-weight: bold; margin-right: 10px;") Email:
+                span(style="margin-right: 10px;") #{contact.email}
+              p.contact-info(style="margin-bottom: 10px;")
+                span(style="font-weight: bold; margin-right: 10px;") Address:
+                span(style="font-style: italic;") #{contact.street}, #{contact.city}, #{contact.state}, #{contact.zip}, #{contact.country}
+              //- Fly To Location Button
+              button.btn.btn-outline-primary.btn-sm.ml-auto(type='button', onclick=`flyToLocation(${contact.latitude}, ${contact.longitude})`) Fly to Location
+            //- Contact Preferences
+            .contact-preferences(style="text-align: right;")
+              label(for=`contact_${contact.id}`, style='font-weight: bold; margin-right: 10px;') Can be contacted by: 
+              section.d-flex.justify-content-end
+                .form-check.mx-2.mb-2
+                  input.form-check-input(style='opacity: 1; cursor: not-allowed; pointer-events: none;', type='checkbox', disabled='', checked=contact.contact_by_phone ? 'checked' : null)
+                  label.form-check-label(style='opacity: 1; pointer-events: none;') Phone
+
+                .form-check.mx-2.mb-2
+                  input.form-check-input(style='opacity: 1; cursor: not-allowed; pointer-events: none;', type='checkbox', disabled='', checked=contact.contact_by_email ? 'checked' : null)
+                  label.form-check-label(style='opacity: 1; pointer-events: none;') Email
+
+                .form-check.mx-2.mb-2
+                  input.form-check-input(style='opacity: 1; cursor: not-allowed; pointer-events: none;', type='checkbox', disabled='', checked=contact.contact_by_mail ? 'checked' : null)
+                  label.form-check-label(style='opacity: 1; pointer-events: none;') Mail
+
+  // Map container
+  #map-container.mb-4(style="position: relative; height: 600px; margin-top: 20px; margin-left: 8%; margin-right: 8%; margin-bottom: 60px;")
+    #map(style="height: 600px;")
+
+  script.
+    document.addEventListener('DOMContentLoaded', () => {
+    // *************** Map Code ****************
+      // Initialize the map
+      const map = L.map('map').setView([41, -74], 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+
+      // Function to fly to location
+      window.flyToLocation = (lat, lng) => {
+        const mapContainer = document.getElementById('map-container');
+        mapContainer.scrollIntoView({ behavior: 'smooth' });
+        map.flyTo([lat, lng], 13);
+      };
+
+      // Define contacts variable
+      const contacts = !{JSON.stringify(contacts)};
+
+      // Loop through contacts and add markers
+      contacts.forEach(contact => {
+        if (contact.latitude && contact.longitude) {
+          const contactInfo = {
+            firstName: contact.first_name,
+            lastName: contact.last_name,
+            street: contact.street,
+            city: contact.city,
+            state: contact.state,
+            zip: contact.zip,
+            country: contact.country
+          };
+          L.marker([contact.latitude, contact.longitude]).addTo(map)
+            .bindPopup(`<b>${contactInfo.firstName} ${contactInfo.lastName}</b><br>${contactInfo.street}, ${contactInfo.city}, ${contactInfo.state}, ${contactInfo.zip}, ${contactInfo.country}`);
+        }
+      });
+
+
+    // *************** Contact Search Code ****************
+
+      // Get the search input elements
+      const firstNameSearch = document.getElementById('firstNameSearch');
+      const lastNameSearch = document.getElementById('lastNameSearch');
+
+      // Event listeners for input changes
+      if (firstNameSearch) {
+        firstNameSearch.addEventListener('input', updateContactList);
+      }
+
+      if (lastNameSearch) {
+        lastNameSearch.addEventListener('input', updateContactList);
+      }
+
+      // Function to update the contact list based on search criteria
+      function updateContactList() {
+        const firstNameValue = firstNameSearch.value.toLowerCase();
+        const lastNameValue = lastNameSearch.value.toLowerCase();
+
+        const contactItems = document.querySelectorAll('.contact-item');
+
+        contactItems.forEach(item => {
+          const firstName = item.querySelector('.contact-name a').textContent.split(' ')[0].toLowerCase();
+          const lastName = item.querySelector('.contact-name a').textContent.split(' ')[1].toLowerCase();
+
+          if (firstName.includes(firstNameValue) && lastName.includes(lastNameValue)) {
+            item.style.display = 'block';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      }
+    });

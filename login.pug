@@ -1,0 +1,39 @@
+doctype html
+html
+  head
+    title Contacts
+    link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css')
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+
+    style.
+      .error-box {
+        background-color: #f8d7da;
+        color: #721c24;
+        padding: 10px; 
+        border-radius: 5px; 
+      }
+
+  body
+    div.form-container.mt-5.d-flex.flex-column.align-items-center.justify-content-center
+      h1.mb-3 Sign in
+      form(action='/login', method='post')
+        .form-floating.mb-3
+          input#username.form-control(type='text', name='username', placeholder='Username', required)
+          label(for='username') Username
+
+        .form-floating.mb-3
+          input#password.form-control(type='password', name='password', placeholder='Password', required)
+          label(for='password') Password
+
+        .row.justify-content-center
+          .col-auto
+            button.btn.btn-success.btn-lg.mb-3(type='submit') Sign in
+          .col-auto
+            button.btn.btn-secondary.btn-lg(type='button', onclick="window.location.href='/'") Nevermind
+
+        section
+          p Don't have an account yet? 
+            button.btn.btn-link(type='button', onclick="window.location.href='/signup'") Sign up here!
+        
+        if error
+          p.error-box.mb-3= error
